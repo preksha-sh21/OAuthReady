@@ -175,3 +175,52 @@ setup instructions and trade-offs.
 - OAuth client credentials: Not created.
 - Full OAuth authorization flow: Not tested.
 - Evidence: Google Cloud Console tested directly.
+
+
+## 4. Live Agent Research – Notion
+
+**Status:** Tested – live guide generated successfully.
+
+### What worked
+- Entered Notion as an unfamiliar provider.
+- Tavily retrieved relevant documentation and supporting sources.
+- Gemini generated a structured OAuth research guide.
+- Sources were classified into official and third-party references.
+- The report distinguished regular OAuth from MCP-related authentication.
+- Unverified claims and practical testing limitations were identified.
+
+### What remains uncertain
+- The generated guide has not been validated through a complete Notion OAuth flow.
+- Token lifecycle details require further confirmation from official documentation.
+- Third-party findings should not be treated as definitive provider requirements.
+
+### Assessment
+The live research flow successfully demonstrated how OAuthReady can investigate an unfamiliar provider without requiring a pre-written guide.
+
+
+## 5. Key Corrections and Learnings
+
+- GitHub registration does not mean the complete OAuth integration has been tested.
+- Slack workspace installation is different from public distribution and Marketplace listing.
+- Google's Testing publishing status does not establish that production verification will be unnecessary.
+- Managed OAuth availability must be checked separately for each provider.
+- Search results from third-party sources must be distinguished from official provider requirements.
+- Hands-on setup time and external approval wait time should be communicated separately.
+
+## 6. Agent vs. Human Responsibilities
+
+### What the agent can do
+- Find relevant provider documentation.
+- Identify OAuth setup requirements and likely blockers.
+- Summarise scopes, redirect URI requirements and approval processes.
+- Generate structured setup instructions.
+- Highlight uncertain information and provide source links.
+
+### What the developer must do
+- Sign in to provider dashboards.
+- Create OAuth applications and configure credentials.
+- Accept provider terms and permissions.
+- Store client secrets securely.
+- Complete provider verification or Marketplace submissions.
+- Test the actual authorization and token exchange flow.
+
