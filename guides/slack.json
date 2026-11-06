@@ -1,0 +1,146 @@
+
+{
+  "app_name": "Slack",
+  "category": "Communication",
+  "difficulty": "Easy for single-workspace setup; Moderate for multi-workspace OAuth distribution",
+  "status": "Partially tested",
+  "oauth_options": {
+    "managed_oauth_status": "Needs verification",
+    "bring_your_own_oauth_available": true,
+    "recommendation": "Composio-managed OAuth availability for Slack has not yet been verified. Developers can use BYO OAuth by creating their own Slack app and configuring its credentials. Verify managed OAuth availability before choosing an approach."
+  },
+  "time_estimate": {
+    "hands_on": "To be measured. Basic app creation and workspace installation were completed during testing; multi-workspace OAuth implementation has not been tested.",
+    "approval_wait": "Unlisted distribution and Marketplace review have not been tested. Marketplace review applies to apps seeking a Marketplace listing, not every unlisted distributed app.",
+    "note": "Slack app creation, chat:write bot scope configuration and installation in a development workspace were tested. Full OAuth authorization and multi-workspace distribution were not tested."
+  },
+  "prerequisites": [
+    "A Slack account",
+    "A Slack development workspace",
+    "Access to https://api.slack.com/apps",
+    "A clear list of the bot and user permissions the integration requires",
+    "An HTTPS callback URL for OAuth distribution",
+    "A backend or server endpoint to handle OAuth callbacks",
+    "A secure location to store Client ID, Client Secret and Signing Secret"
+  ],
+  "setup_steps": [
+    {
+      "step": 1,
+      "title": "Open Slack API Apps",
+      "description": "Visit https://api.slack.com/apps and sign in. Open the Slack API application dashboard."
+    },
+    {
+      "step": 2,
+      "title": "Create a Slack app",
+      "description": "Select Create New App, choose Pick Features, select From Scratch, enter an application name and select the development workspace in which you want to create the app."
+    },
+    {
+      "step": 3,
+      "title": "Configure OAuth permissions",
+      "description": "Open OAuth & Permissions. Under Bot Token Scopes, add only the permissions your app requires. For example, chat:write allows the bot to send messages. Add user token scopes separately only when the app needs to act on behalf of an individual user. Avoid requesting unnecessary permissions."
+    },
+    {
+      "step": 4,
+      "title": "Install the app in your development workspace",
+      "description": "Use Install to Workspace and authorize the requested permissions. Slack issues a Bot User OAuth Token for the installation. This is suitable for testing in the app's associated workspace and does not by itself establish a multi-workspace OAuth distribution flow."
+    },
+    {
+      "step": 5,
+      "title": "Configure OAuth redirect URLs",
+      "description": "For OAuth distribution, open OAuth & Permissions and add your application's callback URL under Redirect URLs. Use HTTPS. During authorization, the redirect_uri must match a configured URL or be a permitted subdirectory. If multiple redirect URLs are configured, send the same redirect_uri during authorization and token exchange."
+    },
+    {
+      "step": 6,
+      "title": "Collect application credentials securely",
+      "description": "Open Basic Information and locate App Credentials. Obtain the Client ID, Client Secret and Signing Secret. The Client ID and Client Secret are used in OAuth authorization and token exchange. The Signing Secret is used to verify requests sent by Slack. Keep all secrets on the server and never expose them in frontend code or public repositories."
+    },
+    {
+      "step": 7,
+      "title": "Implement the OAuth 2.0 authorization flow",
+      "description": "Redirect the installing user to https://slack.com/oauth/v2/authorize with the Client ID and requested bot scopes using scope, and user scopes using user_scope where required. Include a state value to protect against CSRF. Handle the callback, validate state, retrieve the temporary authorization code and exchange it server-side using the OAuth v2 access endpoint and Client Secret. The authorization code expires after 10 minutes."
+    },
+    {
+      "step": 8,
+      "title": "Choose an app distribution method",
+      "description": "Open Manage Distribution. An undistributed app is limited to its associated development workspace. An unlisted distributed app can be installed in other workspaces through OAuth without appearing in the Slack Marketplace. A Marketplace listing is a separate process for apps seeking public discovery and requires Slack review."
+    },
+    {
+      "step": 9,
+      "title": "Meet distribution security requirements",
+      "description": "For distribution to other workspaces, configure HTTPS for OAuth redirect URLs and applicable Slack request URLs. Review workspace installation restrictions and admin approval requirements. Some workspaces may permit installations only by administrators or apps listed in the Slack Marketplace."
+    },
+    {
+      "step": 10,
+      "title": "Handle installation tokens and token rotation",
+      "description": "Store installation information and access tokens securely for each workspace. Slack supports token rotation for eligible apps using granular permissions. When enabled, access tokens are short-lived and refresh tokens are used to obtain replacement tokens. Implement secure refresh-token storage and rotation handling. Token rotation has not been tested in this project."
+    },
+    {
+      "step": 11,
+      "title": "Test the integration",
+      "description": "Test installation, authorization callbacks, token exchange, API requests, scope permissions and error handling. Verify that the bot can perform only the actions allowed by its granted scopes. Test a second workspace separately before claiming multi-workspace distribution works."
+    }
+  ],
+  "potential_blockers": [
+    "Incorrect Client ID or Client Secret: verify the credentials in Basic Information.",
+    "Missing OAuth scopes: add the required bot or user scopes and reinstall or reauthorize the app where necessary.",
+    "Redirect URL mismatch: ensure the callback URL matches a configured redirect URL and that the same redirect_uri is used during authorization and token exchange.",
+    "Non-HTTPS callback URL: Slack requires HTTPS for OAuth redirect URLs.",
+    "Workspace installation restrictions: workspace administrators may restrict app installations or require approval.",
+    "Unlisted versus Marketplace distribution confusion: unlisted distribution and Marketplace listing have different requirements.",
+    "Invalid or expired authorization code: Slack authorization codes expire after 10 minutes; restart the authorization flow.",
+    "Invalid or expired access token: check token validity and implement token rotation where applicable.",
+    "Exposed Client Secret or Signing Secret: rotate compromised credentials and update the application securely."
+  ],
+  "evidence": [
+    {
+      "claim": "Slack app OAuthReady was created in a development workspace.",
+      "type": "Tested"
+    },
+    {
+      "claim": "The chat:write Bot Token Scope was configured.",
+      "type": "Tested"
+    },
+    {
+      "claim": "The app was installed into the development workspace.",
+      "type": "Tested"
+    },
+    {
+      "claim": "The Slack dashboard identified HTTPS and application security requirements for distribution.",
+      "type": "Tested via official dashboard"
+    },
+    {
+      "claim": "Slack OAuth v2 uses an authorization code flow with requested scopes, user approval and server-side code exchange.",
+      "type": "Official documentation"
+    },
+    {
+      "claim": "Unlisted distribution is distinct from Slack Marketplace listing and review.",
+      "type": "Official documentation"
+    },
+    {
+      "claim": "Slack supports bot scopes and user scopes for different authorization contexts.",
+      "type": "Official documentation"
+    },
+    {
+      "claim": "Composio-managed OAuth availability for Slack.",
+      "type": "Not verified"
+    }
+  ],
+  "limitations": [
+    "Complete OAuth authorization flow has not been tested.",
+    "OAuth callback handling has not been implemented or tested.",
+    "Authorization code exchange has not been tested.",
+    "Installation in a second workspace has not been tested.",
+    "Unlisted public distribution has not been activated.",
+    "Slack Marketplace submission and review have not been attempted.",
+    "Token rotation has not been tested.",
+    "Composio-managed OAuth availability for Slack remains unverified."
+  ],
+  "sources": [
+    "https://api.slack.com/apps",
+    "https://docs.slack.dev/authentication/installing-with-oauth/",
+    "https://docs.slack.dev/reference/scopes/",
+    "https://docs.slack.dev/app-management/distribution/",
+    "https://docs.slack.dev/tools/java-slack-sdk/guides/app-distribution/",
+    "https://docs.slack.dev/tools/node-slack-sdk/oauth/"
+  ]
+}

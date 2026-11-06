@@ -1,0 +1,119 @@
+
+{
+  "app_name": "GitHub",
+  "category": "Developer Tools",
+  "difficulty": "Easy for registration; Moderate for full implementation",
+  "status": "Partially tested",
+  "oauth_options": {
+    "managed_oauth_available": true,
+    "bring_your_own_oauth_available": true,
+    "recommendation": "Developers can use Composio-managed OAuth to avoid creating and maintaining their own OAuth credentials. BYO OAuth is useful when they need control over the application branding, credentials and configuration. Consider a GitHub App instead of a GitHub OAuth App when fine-grained repository permissions or app-level access are required."
+  },
+  "time_estimate": {
+    "hands_on": "Approximately 5–10 minutes for registration (planning estimate, not timed). Full integration time depends on implementation.",
+    "approval_wait": "No general platform approval step encountered during registration. Individual users must authorize the application.",
+    "note": "GitHub OAuth App registration was completed successfully. Full authorization, callback handling and token exchange have not been tested."
+  },
+  "prerequisites": [
+    "A GitHub account",
+    "Access to GitHub Developer Settings",
+    "An application homepage URL",
+    "A callback URL or endpoint in your application",
+    "A decision about the minimum OAuth permissions required",
+    "A secure location to store the Client ID and Client Secret"
+  ],
+  "setup_steps": [
+    {
+      "step": 1,
+      "title": "Open GitHub Developer Settings",
+      "description": "Visit https://github.com/settings/developers. Sign in to GitHub, open Developer settings from your account settings, and select OAuth Apps in the sidebar."
+    },
+    {
+      "step": 2,
+      "title": "Register a new OAuth App",
+      "description": "Select New OAuth App. If this is your first application, GitHub may display Register a new application instead. Enter an application name that identifies your integration. Only provide information that is safe to make public."
+    },
+    {
+      "step": 3,
+      "title": "Configure application URLs",
+      "description": "Enter the full Homepage URL of your application and its Authorization callback URL. The callback must point to an endpoint that can receive GitHub's authorization response. GitHub currently supports up to 10 callback URLs for OAuth Apps. Use the correct URL for local development and production, and avoid enabling wildcard matching unless absolutely necessary."
+    },
+    {
+      "step": 4,
+      "title": "Register the application and generate credentials",
+      "description": "Complete registration. Copy the Client ID and generate a Client Secret from the application settings. Store the secret in an environment variable or secrets manager. Never put it in frontend code, commit it to Git, or share it publicly."
+    },
+    {
+      "step": 5,
+      "title": "Choose OAuth scopes",
+      "description": "Request the minimum permissions needed when redirecting a user to GitHub's authorization endpoint. Examples include read:user for profile information, user:email for email addresses, and repo for broad repository access including private repositories. The repo scope is powerful, so request it only when necessary. Users must authorize the requested access."
+    },
+    {
+      "step": 6,
+      "title": "Implement authorization and callback handling",
+      "description": "Redirect the user to GitHub's authorization endpoint with the Client ID, requested scopes, redirect URI where applicable, and a unique state value to protect against CSRF. Handle the authorization code returned to your callback endpoint and exchange it server-side for an access token."
+    },
+    {
+      "step": 7,
+      "title": "Handle access tokens securely",
+      "description": "GitHub supports expiring OAuth access tokens. When expiration is enabled, access tokens last approximately 8 hours and refresh tokens last approximately 6 months. Refreshing generates a new access-token and refresh-token pair; the previous refresh token becomes invalid. Check the actual token response for expiration fields, securely store the latest token pair, and implement refresh handling."
+    },
+    {
+      "step": 8,
+      "title": "Verify permissions and test the integration",
+      "description": "Test authorization, callback handling, token exchange, API access and error handling. Check that the authorized user and their organization policies permit the requested operations. Revoke or regenerate compromised credentials when necessary."
+    }
+  ],
+  "potential_blockers": [
+    "Incorrect Client ID or Client Secret: verify the credentials in GitHub Developer Settings and regenerate a compromised secret.",
+    "Incorrect callback URL: ensure the redirect URI matches a callback URL configured in the OAuth App.",
+    "Insufficient OAuth scopes: request the permissions required by the API operation and ask the user to authorize them.",
+    "Organisation access restrictions: organization policies, membership permissions or SAML SSO requirements may prevent access to some resources.",
+    "Expired or invalid refresh token: send the user through the authorization flow again to obtain a new token pair.",
+    "Exposed Client Secret: revoke or regenerate the secret and update the application securely."
+  ],
+  "evidence": [
+    {
+      "claim": "GitHub OAuth App registration completed successfully in GitHub Developer Settings.",
+      "type": "Tested"
+    },
+    {
+      "claim": "Composio-managed OAuth is available for the GitHub toolkit.",
+      "type": "Verified product availability"
+    },
+    {
+      "claim": "GitHub OAuth Apps act on behalf of a user, while GitHub Apps support fine-grained permissions and additional app-level access models.",
+      "type": "Official documentation"
+    },
+    {
+      "claim": "GitHub supports OAuth scopes including read:user, user:email and repo.",
+      "type": "Official documentation"
+    },
+    {
+      "claim": "Expiring OAuth access tokens last approximately 8 hours and refresh tokens approximately 6 months. Refreshing rotates the token pair.",
+      "type": "Official documentation"
+    },
+    {
+      "claim": "GitHub recommends avoiding wildcard callback matching unless necessary because of security risks.",
+      "type": "Official documentation"
+    }
+  ],
+  "limitations": [
+    "Complete OAuth authorization flow has not been tested.",
+    "Authorization callback handling has not been tested.",
+    "Authorization code and token exchange have not been tested.",
+    "Refresh-token rotation has not been tested.",
+    "API calls using the generated OAuth credentials have not been tested.",
+    "Production deployment has not been tested.",
+    "The 5–10 minute registration estimate is a planning estimate, not a measured result."
+  ],
+  "sources": [
+    "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+    "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+    "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+    "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/best-practices-for-creating-an-oauth-app",
+    "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps",
+    "https://docs.composio.dev/toolkits/managed-auth",
+    "https://github.com/settings/developers"
+  ]
+}

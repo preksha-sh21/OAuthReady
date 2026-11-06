@@ -1,0 +1,129 @@
+
+{
+  "app_name": "Google",
+  "category": "Productivity",
+  "difficulty": "Moderate for basic setup; Hard for public production use with restricted Gmail scopes",
+  "status": "Partially tested",
+  "oauth_options": {
+    "managed_oauth_status": "Needs verification",
+    "bring_your_own_oauth_available": true,
+    "recommendation": "Google OAuth can be configured using your own Google Cloud project and OAuth client. Composio-managed OAuth availability for this integration has not been verified. BYO OAuth gives developers control over their OAuth client, branding, scopes and verification process."
+  },
+  "time_estimate": {
+    "hands_on": "Not measured. Project creation, branding configuration, Gmail API enablement and scope configuration were completed.",
+    "approval_wait": "Not tested. Production verification and any required security assessment can add significant time; Google's restricted-scope guidance notes that verification can take several weeks.",
+    "note": "OAuth branding and the restricted Gmail readonly scope were configured. OAuth client creation, authorization and token exchange were not tested."
+  },
+  "prerequisites": [
+    "Google account",
+    "Two-step verification enabled",
+    "Google Cloud project",
+    "Gmail API enabled",
+    "Application name and support email",
+    "Authorized redirect URI and a callback endpoint for a web application"
+  ],
+  "setup_steps": [
+    {
+      "step": 1,
+      "title": "Create a Google Cloud project",
+      "description": "Open https://console.cloud.google.com/ and create a project for your integration. Keep development and production projects separate when preparing for a public launch."
+    },
+    {
+      "step": 2,
+      "title": "Configure OAuth branding",
+      "description": "Open Google Auth Platform and configure the application name, user support email and developer contact email."
+    },
+    {
+      "step": 3,
+      "title": "Configure the audience",
+      "description": "Choose External if users outside your Google Workspace organisation need access. Testing mode limits access to up to 100 listed test users. Users must be added before they can authorize the app."
+    },
+    {
+      "step": 4,
+      "title": "Enable Gmail API",
+      "description": "Open APIs & Services Library, search for Gmail API and enable it in your Google Cloud project."
+    },
+    {
+      "step": 5,
+      "title": "Add the Gmail OAuth scope",
+      "description": "Open Data Access and add https://www.googleapis.com/auth/gmail.readonly. This is a restricted scope because it allows the application to view Gmail messages and settings. Request only the permissions your integration needs."
+    },
+    {
+      "step": 6,
+      "title": "Review OAuth verification requirements",
+      "description": "Open Verification Centre and review the requirements for your requested scopes. Testing and development use cases may qualify for exceptions, but public production applications requesting restricted scopes generally require verification. A security assessment may apply if restricted data is accessed through or stored on a third-party server."
+    },
+    {
+      "step": 7,
+      "title": "Create OAuth credentials",
+      "description": "Open Google Auth Platform Clients, create an OAuth client and select Web application if you are building a web integration. Configure the authorized redirect URI. For local development, localhost redirect URIs are permitted. Store the client ID and client secret securely."
+    },
+    {
+      "step": 8,
+      "title": "Implement and test the OAuth flow",
+      "description": "Redirect the user to Google's OAuth authorization endpoint with the client ID, requested scopes, redirect URI, response_type=code and a state value. Handle the callback, validate state and exchange the authorization code server-side for access and refresh tokens. Store tokens securely and test Gmail API access."
+    }
+  ],
+  "potential_blockers": [
+    "Google Cloud account requires two-step verification",
+    "Gmail API must be enabled before using Gmail scopes",
+    "Gmail readonly is a restricted OAuth scope",
+    "External apps in Testing mode require users to be added to the test-user list",
+    "Testing-mode authorizations expire after seven days",
+    "Public production access can require OAuth verification",
+    "A security assessment may apply when restricted data is accessed through or stored on a third-party server",
+    "Redirect URI must exactly match an authorized URI",
+    "OAuth client secrets and user tokens must be stored securely"
+  ],
+  "evidence": [
+    {
+      "claim": "Google Cloud access required two-step verification",
+      "type": "Tested",
+      "details": "Two-step verification was enabled before Google Cloud access was available."
+    },
+    {
+      "claim": "Google OAuth branding and audience were configured",
+      "type": "Tested",
+      "details": "Application name, support email, developer contact email and External audience were configured."
+    },
+    {
+      "claim": "Gmail API was enabled",
+      "type": "Tested",
+      "details": "Gmail API was enabled through APIs & Services Library."
+    },
+    {
+      "claim": "Gmail readonly is classified as a restricted scope",
+      "type": "Tested",
+      "details": "The scope was added and displayed as restricted in Google Auth Platform."
+    },
+    {
+      "claim": "Verification Centre displayed no verification requirement",
+      "type": "Tested",
+      "details": "The message appeared while the application was configured with Testing publishing status. This does not establish that production verification is unnecessary."
+    },
+    {
+      "claim": "Google OAuth authorization and token exchange work end to end",
+      "type": "Not tested",
+      "details": "No OAuth client was created and no authorization flow was executed."
+    }
+  ],
+  "limitations": [
+    "OAuth client credentials not created",
+    "Complete OAuth authorization flow not tested",
+    "Authorization code exchange not tested",
+    "Gmail API requests using OAuth tokens not tested",
+    "Production verification not attempted",
+    "Security assessment requirements not evaluated for a production deployment",
+    "Composio-managed OAuth availability not yet verified",
+    "Time required for setup and approval has not been measured"
+  ],
+  "sources": [
+    "https://console.cloud.google.com/",
+    "https://developers.google.com/identity/protocols/oauth2",
+    "https://developers.google.com/identity/protocols/oauth2/web-server",
+    "https://support.google.com/cloud/answer/13464325",
+    "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+    "https://developers.google.com/identity/protocols/oauth2/production-readiness/overview",
+    "https://developers.google.com/identity/protocols/oauth2/policies"
+  ]
+}
