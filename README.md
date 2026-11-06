@@ -2,8 +2,9 @@
 
 **Know the steps, the wait and the blockers before you start setting up an OAuth app.**
 
-Live app: `ADD_YOUR_STREAMLIT_LINK`
-Repo: `ADD_YOUR_GITHUB_LINK`
+Live App: https://preksha-integrations.streamlit.app
+
+GitHub Repository: https://github.com/preksha-sh21/OAuthReady
 
 ---
 
